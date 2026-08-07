@@ -153,7 +153,6 @@
               <div class="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden shadow border-2 border-white relative group">
                 <img id="studentPhoto" src="" alt="Foto Siswa" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150x200?text=Tidak+Ada+Foto'">
               </div>
-              <span id="studentBadgeKelas" class="inline-block mt-2 px-3 py-1 bg-blue-700 text-white text-xs font-bold rounded-full shadow-sm"></span>
             </div>
 
             <!-- Detail Informasi Lengkap (9 Atribut) -->
@@ -471,7 +470,6 @@
       document.getElementById('studentTanggalLahir').innerText = student.tanggal_lahir || '-';
       document.getElementById('studentKelasText').innerText = `Kelas ${student.kelas || '-'}`;
       document.getElementById('studentAlamat').innerText = student.alamat || '-';
-      document.getElementById('studentBadgeKelas').innerText = `Kelas ${student.kelas || '-'}`;
       document.getElementById('studentPhoto').src = student.foto || 'https://via.placeholder.com/150x200?text=Tidak+Ada+Foto';
     }
 
