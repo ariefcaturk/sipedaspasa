@@ -16,7 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f3f4f6;
@@ -40,13 +40,13 @@
     <!-- CARD CONTAINER -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
       
-      <!-- KOP SEKOLAH HEADER (Google Drive Hosted Image) -->
+      <!-- KOP SEKOLAH HEADER -->
       <div class="p-3 md:p-5 bg-white border-b-4 border-double border-gray-900 flex justify-center items-center">
         <div class="w-full max-w-3xl flex flex-col items-center justify-center">
-          <img src="https://lh3.googleusercontent.com/d/118AwlcPy5cUV8qKCvjlhJmabX4p8iweM" 
+          <img src="https://drive.google.com/thumbnail?id=118AwlcPy5cUV8qKCvjlhJmabX4p8iweM&sz=w1200" 
                alt="Kop Resmi UPTD SPF SMP Negeri 1 Bondowoso" 
                class="w-full max-w-3xl h-auto object-contain mx-auto" 
-               onerror="this.onerror=null; this.src='https://drive.google.com/thumbnail?id=118AwlcPy5cUV8qKCvjlhJmabX4p8iweM&sz=w1200'; this.onerror=function(){ this.style.display='none'; document.getElementById('fallbackKop').classList.remove('hidden'); };" />
+               onerror="this.onerror=null; document.getElementById('fallbackKop').classList.remove('hidden'); this.style.display='none';" />
 
           <!-- Tampilan Cadangan jika Gambar Mengalami Kendala Akses -->
           <div id="fallbackKop" class="hidden w-full flex items-center justify-between border-b-2 border-black pb-2 px-2 text-center">
@@ -77,7 +77,7 @@
           <i class="fa-solid fa-circle-info text-blue-600 text-lg mt-0.5 mr-3"></i>
           <div>
             <h4 class="font-semibold text-blue-900 text-sm">Layanan Pencarian Data Siswa Resmi</h4>
-            <p class="text-xs text-blue-700 mt-0.5">Pilih kategori pencarian (NIS, NISN, atau Nama) lalu masukkan kata kunci untuk menampilkan informasi data siswa lengkap.</p>
+            <p class="text-xs text-blue-700 mt-0.5">Pilih kategori pencarian (NIS, NISN, Nama, atau Kelas) lalu masukkan kata kunci untuk menampilkan informasi data siswa.</p>
           </div>
         </div>
       </div>
@@ -86,21 +86,25 @@
       <div class="p-4 md:p-6">
         <form id="searchForm" class="space-y-4" onsubmit="event.preventDefault(); handleSearch();">
           
-          <!-- Pilihan Kategori (Diperbarui: NIS, NISN, Nama) -->
+          <!-- Pilihan Kategori (NIS, NISN, Nama, Kelas) -->
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Kategori Pencarian:</label>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <label class="flex items-center p-2.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
-                <input type="radio" name="searchCategory" value="nis" checked class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-                <span class="ml-2 text-xs font-semibold text-gray-700"><i class="fa-solid fa-id-card mr-1.5 text-gray-400"></i> NIS</span>
+                <input type="radio" name="searchCategory" value="nis" checked onchange="updatePlaceholder()" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                <span class="ml-1.5 text-xs font-semibold text-gray-700"><i class="fa-solid fa-id-card mr-1 text-gray-400"></i> NIS</span>
               </label>
               <label class="flex items-center p-2.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
-                <input type="radio" name="searchCategory" value="nisn" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-                <span class="ml-2 text-xs font-semibold text-gray-700"><i class="fa-solid fa-hashtag mr-1.5 text-gray-400"></i> NISN</span>
+                <input type="radio" name="searchCategory" value="nisn" onchange="updatePlaceholder()" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                <span class="ml-1.5 text-xs font-semibold text-gray-700"><i class="fa-solid fa-hashtag mr-1 text-gray-400"></i> NISN</span>
               </label>
               <label class="flex items-center p-2.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
-                <input type="radio" name="searchCategory" value="nama" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-                <span class="ml-2 text-xs font-semibold text-gray-700"><i class="fa-solid fa-user mr-1.5 text-gray-400"></i> Nama Siswa</span>
+                <input type="radio" name="searchCategory" value="nama" onchange="updatePlaceholder()" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                <span class="ml-1.5 text-xs font-semibold text-gray-700"><i class="fa-solid fa-user mr-1 text-gray-400"></i> Nama</span>
+              </label>
+              <label class="flex items-center p-2.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
+                <input type="radio" name="searchCategory" value="kelas" onchange="updatePlaceholder()" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                <span class="ml-1.5 text-xs font-semibold text-gray-700"><i class="fa-solid fa-users mr-1 text-gray-400"></i> Kelas</span>
               </label>
             </div>
           </div>
@@ -111,7 +115,7 @@
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </div>
-              <input type="text" id="searchInput" required placeholder="Masukkan kata kunci pencarian..." 
+              <input type="text" id="searchInput" placeholder="Masukkan NIS siswa..." 
                 class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
             </div>
             <button type="submit" class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-sm">
@@ -131,16 +135,18 @@
         <!-- HEADER HASIL & AKSI EXPORT -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-gray-200">
           <div>
-            <h3 class="text-base font-bold text-gray-800">Hasil Pencarian</h3>
+            <h3 id="resultTitle" class="text-base font-bold text-gray-800">Hasil Pencarian</h3>
             <p id="resultCount" class="text-xs text-gray-500">Ditemukan 0 data</p>
           </div>
-          <div id="exportButtons" class="hidden flex gap-2">
-            <button onclick="exportToExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded transition flex items-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-file-excel"></i> Excel
-            </button>
-            <button onclick="exportToPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded transition flex items-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-file-pdf"></i> PDF
-            </button>
+          <div class="flex gap-2 items-center">
+            <div id="exportButtons" class="hidden flex gap-2">
+              <button onclick="exportToExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded transition flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-file-excel"></i> Excel
+              </button>
+              <button onclick="exportToPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded transition flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-file-pdf"></i> PDF
+              </button>
+            </div>
           </div>
         </div>
 
@@ -148,14 +154,14 @@
         <div id="singleStudentCard" class="hidden max-w-2xl mx-auto bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 shadow-sm">
           <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
             
-            <!-- Foto Siswa -->
+            <!-- Foto Siswa (Tampilan Murni Tanpa Tulisan Bawah) -->
             <div class="flex-shrink-0 text-center">
               <div class="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden shadow border-2 border-white relative group">
                 <img id="studentPhoto" src="" alt="Foto Siswa" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150x200?text=Tidak+Ada+Foto'">
               </div>
             </div>
 
-            <!-- Detail Informasi Lengkap (9 Atribut) -->
+            <!-- Detail Informasi Lengkap -->
             <div class="flex-grow w-full space-y-2.5">
               <div class="border-b border-blue-200 pb-2">
                 <span class="text-[10px] uppercase font-bold tracking-wider text-blue-600">Nama Lengkap</span>
@@ -175,20 +181,27 @@
 
               <div class="grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span class="text-gray-500 font-medium block">Agama</span>
-                  <span id="studentAgama" class="font-semibold text-gray-800"></span>
+                  <span class="text-gray-500 font-medium block">Jenis Kelamin</span>
+                  <div id="studentJkContainer" class="mt-0.5"></div>
                 </div>
                 <div>
-                  <span class="text-gray-500 font-medium block">Tempat Lahir</span>
-                  <span id="studentTempatLahir" class="font-semibold text-gray-800"></span>
+                  <span class="text-gray-500 font-medium block">Agama</span>
+                  <span id="studentAgama" class="font-semibold text-gray-800"></span>
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-2 text-xs">
                 <div>
+                  <span class="text-gray-500 font-medium block">Tempat Lahir</span>
+                  <span id="studentTempatLahir" class="font-semibold text-gray-800"></span>
+                </div>
+                <div>
                   <span class="text-gray-500 font-medium block">Tanggal Lahir</span>
                   <span id="studentTanggalLahir" class="font-semibold text-gray-800"></span>
                 </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 text-xs">
                 <div>
                   <span class="text-gray-500 font-medium block">Kelas Saat Ini</span>
                   <span id="studentKelasText" class="font-bold text-blue-900"></span>
@@ -211,7 +224,7 @@
           </div>
         </div>
 
-        <!-- TAMPILAN TABEL MULTI DATA (NAMA) -->
+        <!-- TAMPILAN TABEL MULTI DATA (NAMA / KELAS) -->
         <div id="multiStudentTable" class="hidden overflow-x-auto rounded-lg border border-gray-200">
           <table class="w-full text-left border-collapse text-xs">
             <thead>
@@ -220,6 +233,7 @@
                 <th class="p-3">NIS</th>
                 <th class="p-3">NISN</th>
                 <th class="p-3">Nama Lengkap</th>
+                <th class="p-3 text-center">JK</th>
                 <th class="p-3">Agama</th>
                 <th class="p-3">Kelas</th>
                 <th class="p-3 text-center">Aksi</th>
@@ -262,12 +276,42 @@
     <p>© 2026 UPTD SPF SMP Negeri 1 Bondowoso. Hak Cipta Dilindungi.</p>
   </footer>
 
-  <!-- JAVASCRIPT INTEGRATION BACKEND -->
   <script>
-    // KONSTANTA URL WEB APP GOOGLE APPS SCRIPT
     const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoySVMbx4126OS5pWpO_GkBJjvtrpiNyZgFDJ_fmQA_Gpzj09-PsXEWVffQHf19V9Bfg/exec";
-
     let currentSearchResults = [];
+
+    function updatePlaceholder() {
+      const category = document.querySelector('input[name="searchCategory"]:checked').value;
+      const input = document.getElementById('searchInput');
+      if (category === 'nis') input.placeholder = "Masukkan NIS siswa...";
+      else if (category === 'nisn') input.placeholder = "Masukkan NISN siswa...";
+      else if (category === 'nama') input.placeholder = "Masukkan nama siswa...";
+      else if (category === 'kelas') input.placeholder = "Contoh: 7A, 8B, 9C...";
+    }
+
+    // HELPER: Standarisasi Teks Jenis Kelamin (Laki-laki / Perempuan)
+    function formatGender(val) {
+      if (!val || val === '-' || val === 'undefined') return '-';
+      const str = String(val).trim().toLowerCase();
+      if (str === 'l' || str.startsWith('laki') || str === 'm' || str === 'male' || str === 'pria') {
+        return 'Laki-laki';
+      }
+      if (str === 'p' || str.startsWith('peremp') || str.startsWith('wanita') || str === 'f' || str === 'female') {
+        return 'Perempuan';
+      }
+      return val;
+    }
+
+    // HELPER: Merender Badge Visual Jenis Kelamin dengan Ikon
+    function getGenderBadgeHTML(val) {
+      const formatted = formatGender(val);
+      if (formatted === 'Laki-laki') {
+        return `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full font-bold text-[11px] border border-blue-200"><i class="fa-solid fa-mars text-blue-600"></i> Laki-laki</span>`;
+      } else if (formatted === 'Perempuan') {
+        return `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-pink-100 text-pink-800 rounded-full font-bold text-[11px] border border-pink-200"><i class="fa-solid fa-venus text-pink-600"></i> Perempuan</span>`;
+      }
+      return `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-800 rounded-full font-bold text-[11px] border border-gray-200">${val || '-'}</span>`;
+    }
 
     // CUSTOM TOAST NOTIFICATION
     function showToast(message, type = 'info') {
@@ -352,16 +396,19 @@
       });
     }
 
-    async function handleSearch() {
+    function handleSearch() {
       const category = document.querySelector('input[name="searchCategory"]:checked').value;
-      const keyword = document.getElementById('searchInput').value.trim();
+      let keyword = document.getElementById('searchInput').value.trim();
+      executeSearch(category, keyword);
+    }
 
+    async function executeSearch(category, keyword) {
       if (!keyword) {
         showToast("Silakan masukkan kata kunci pencarian!", "warning");
         return;
       }
 
-      toggleLoading(true, "Menghubungkan ke Google Sheets...");
+      toggleLoading(true, "Menghubungkan ke server...");
 
       try {
         let result = null;
@@ -383,7 +430,7 @@
             const response = await fetch(APP_SCRIPT_URL, {
               method: "POST",
               headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({ action: "search", category, keyword }),
+              body: JSON.stringify({ action: "search", category: category, keyword: keyword }),
               redirect: "follow"
             });
 
@@ -416,7 +463,7 @@
         } else if (result && !result.success) {
           showToast(result.message || "Gagal mengambil data dari server.", "error");
         } else {
-          showToast("Gagal terhubung ke Google Apps Script. Lakukan 'Manage Deployments -> New Version' pada GAS.", "error");
+          showToast("Gagal terhubung ke Google Apps Script.", "error");
         }
 
       } catch (error) {
@@ -426,9 +473,9 @@
       }
     }
 
-    // TAMPILKAN HASIL
     function displayResults(data, category) {
       const resultArea = document.getElementById('resultArea');
+      const resultTitle = document.getElementById('resultTitle');
       const resultCount = document.getElementById('resultCount');
       const singleCard = document.getElementById('singleStudentCard');
       const multiTable = document.getElementById('multiStudentTable');
@@ -440,13 +487,14 @@
         singleCard.classList.add('hidden');
         multiTable.classList.add('hidden');
         exportButtons.classList.add('hidden');
+        resultTitle.innerText = "Hasil Pencarian";
         resultCount.innerText = "Ditemukan 0 data";
         showToast("Data siswa tidak ditemukan.", "error");
         return;
       }
 
+      resultTitle.innerText = "Hasil Pencarian Data Siswa";
       resultCount.innerText = `Ditemukan ${data.length} data siswa`;
-      showToast(`Pencarian berhasil. Ditemukan ${data.length} data.`, "success");
 
       if (data.length === 1 && (category === 'nis' || category === 'nisn')) {
         renderSingleCard(data[0]);
@@ -459,12 +507,14 @@
         singleCard.classList.add('hidden');
         exportButtons.classList.remove('hidden');
       }
+      showToast(`Pencarian berhasil. Ditemukan ${data.length} data.`, "success");
     }
 
     function renderSingleCard(student) {
       document.getElementById('studentNama').innerText = student.nama || '-';
       document.getElementById('studentNis').innerText = student.nis || '-';
       document.getElementById('studentNisn').innerText = student.nisn || '-';
+      document.getElementById('studentJkContainer').innerHTML = getGenderBadgeHTML(student.jenis_kelamin);
       document.getElementById('studentAgama').innerText = student.agama || '-';
       document.getElementById('studentTempatLahir').innerText = student.tempat_lahir || '-';
       document.getElementById('studentTanggalLahir').innerText = student.tanggal_lahir || '-';
@@ -485,6 +535,7 @@
           <td class="p-3 font-semibold text-gray-800">${s.nis || '-'}</td>
           <td class="p-3 text-gray-600">${s.nisn || '-'}</td>
           <td class="p-3 font-bold text-blue-900">${s.nama || '-'}</td>
+          <td class="p-3 text-center">${getGenderBadgeHTML(s.jenis_kelamin)}</td>
           <td class="p-3 text-gray-700">${s.agama || '-'}</td>
           <td class="p-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold text-[11px]">Kelas ${s.kelas || '-'}</span></td>
           <td class="p-3 text-center">
@@ -522,12 +573,12 @@
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <span class="text-gray-500 block">Agama:</span>
-                <span class="font-semibold text-gray-800">${student.agama || '-'}</span>
+                <span class="text-gray-500 block">Jenis Kelamin:</span>
+                <div class="mt-0.5">${getGenderBadgeHTML(student.jenis_kelamin)}</div>
               </div>
               <div>
-                <span class="text-gray-500 block">Kelas Saat Ini:</span>
-                <span class="font-semibold text-blue-700">Kelas ${student.kelas || '-'}</span>
+                <span class="text-gray-500 block">Agama:</span>
+                <span class="font-semibold text-gray-800">${student.agama || '-'}</span>
               </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
@@ -539,6 +590,10 @@
                 <span class="text-gray-500 block">Tanggal Lahir:</span>
                 <span class="font-semibold text-gray-800">${student.tanggal_lahir || '-'}</span>
               </div>
+            </div>
+            <div>
+              <span class="text-gray-500 block">Kelas Saat Ini:</span>
+              <span class="font-semibold text-blue-700">Kelas ${student.kelas || '-'}</span>
             </div>
             <div>
               <span class="text-gray-500 block">Alamat Rumah:</span>
@@ -567,6 +622,7 @@
         "NIS": s.nis,
         "NISN": s.nisn,
         "Nama Lengkap": s.nama,
+        "Jenis Kelamin": formatGender(s.jenis_kelamin),
         "Agama": s.agama,
         "Tempat Lahir": s.tempat_lahir,
         "Tanggal Lahir": s.tanggal_lahir,
@@ -596,6 +652,7 @@
         s.nis,
         s.nisn,
         s.nama,
+        formatGender(s.jenis_kelamin),
         s.agama,
         `${s.tempat_lahir}, ${s.tanggal_lahir}`,
         s.kelas
@@ -603,7 +660,7 @@
 
       doc.autoTable({
         startY: 28,
-        head: [['No', 'NIS', 'NISN', 'Nama Lengkap', 'Agama', 'TTL', 'Kelas']],
+        head: [['No', 'NIS', 'NISN', 'Nama Lengkap', 'JK', 'Agama', 'TTL', 'Kelas']],
         body: tableData,
         theme: 'striped',
         headStyles: { fillColor: [30, 58, 138] }
@@ -624,6 +681,10 @@
       const nama = document.getElementById('studentNama').innerText;
       const nis = document.getElementById('studentNis').innerText;
       const nisn = document.getElementById('studentNisn').innerText;
+      
+      const studentObj = currentSearchResults.find(s => s.nis === nis);
+      const jenisKelamin = studentObj ? formatGender(studentObj.jenis_kelamin) : '-';
+
       const agama = document.getElementById('studentAgama').innerText;
       const tempatLahir = document.getElementById('studentTempatLahir').innerText;
       const tanggalLahir = document.getElementById('studentTanggalLahir').innerText;
@@ -641,14 +702,15 @@
       doc.setFontSize(10);
       doc.text(`Nama Lengkap   : ${nama}`, 14, 32);
       doc.text(`NIS / NISN     : ${nis} / ${nisn}`, 14, 40);
-      doc.text(`Agama          : ${agama}`, 14, 48);
-      doc.text(`Tempat Lahir   : ${tempatLahir}`, 14, 56);
-      doc.text(`Tanggal Lahir  : ${tanggalLahir}`, 14, 64);
-      doc.text(`Kelas Saat Ini : ${kelas}`, 14, 72);
-      doc.text(`Alamat Rumah   : ${alamat}`, 14, 80);
+      doc.text(`Jenis Kelamin  : ${jenisKelamin}`, 14, 48);
+      doc.text(`Agama          : ${agama}`, 14, 56);
+      doc.text(`Tempat Lahir   : ${tempatLahir}`, 14, 64);
+      doc.text(`Tanggal Lahir  : ${tanggalLahir}`, 14, 72);
+      doc.text(`Kelas Saat Ini : ${kelas}`, 14, 80);
+      doc.text(`Alamat Rumah   : ${alamat}`, 14, 88);
 
       doc.setFontSize(8);
-      doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 95);
+      doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 102);
 
       doc.save(`Kartu_Siswa_${nis}.pdf`);
       showToast("Kartu Data Siswa berhasil dicetak!", "success");
